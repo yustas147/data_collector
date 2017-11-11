@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="dc_page_tree_view">
+            <field name="name">dc.page.tree.view</field>
+            <field name="model">dc.page</field>
+            <field name="sequence">10</field>
+            <field name="arch" type="xml">
+                <tree string="DC Pages" editable="bottom">
+                    <field name="base_url"/>                    
+                </tree>                
+            </field>            
+        </record>        
+        
+        <record model="ir.ui.view" id="dc_page_form_view">
+            <field name="name">dc.page.form.view</field>
+            <field name="model">dc.page</field>
+            <field name="sequence">20</field>
+            <field name="arch" type="xml">
+                <form string="Data Collector Page">
+                        <group>
+                             <field name="base_url"/>
+                             <field name="el_ids"/>
+                        </group>                        
+                </form>                
+            </field>            
+        </record>        
+        <record model="ir.ui.view" id="dc_el_tree_view">
+            <field name="name">dc.el.tree.view</field>
+            <field name="model">dc.el</field>
+            <field name="sequence">10</field>
+            <field name="arch" type="xml">
+                <tree string="DC els" editable="bottom">
+                             <field name="name"/>
+                             <field name="model_id"/>
+                             <field name="x_path"/>
+                             <field name="page_id"/>
+                             <field name="property_id"/>
+                             <field name="attr_ids" widget='many2many_tags'/>
+                </tree>                
+            </field>            
+        </record>        
+        
+        <record model="ir.ui.view" id="dc_el_form_view">
+            <field name="name">dc.el.form.view</field>
+            <field name="model">dc.el</field>
+            <field name="sequence">20</field>
+            <field name="arch" type="xml">
+                <form string="Data Collector Element">
+                        <group>
+                             <field name="name"/>
+                             <field name="model_id"/>
+                             <field name="x_path"/>
+                             <field name="page_id"/>
+                             <field name="property_id"/>
+                             <field name="attr_ids" widget='many2many_tags'/>
+                        </group>                        
+                </form>                
+            </field>            
+        </record>        
+    </data>    
+</openerp>

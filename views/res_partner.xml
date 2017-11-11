@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="dc_inherits_base_view_partner_form">
+                 <field name="name">dc.res.partner.form.view</field>
+                 <field name="model">res.partner</field>
+                 <field name="inherit_id" ref="base.view_partner_form"/>
+                 <field name="sequence">20</field>
+                 <field name="arch" type="xml">
+                     <xpath expr="//sheet" position="before">
+                         <header>
+                             <button name='get_dc_elements' string='Get DC Elements' type='object'/>
+                             <button name='get_my_data' string='get my data' type='object'/>
+                             <button name='update_my_data' string='update my data' type='object'/>
+                         </header>
+                     </xpath>                     
+                 </field>                 
+        </record>        
+    </data>    
+</openerp>

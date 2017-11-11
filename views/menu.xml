@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+          <!--Root menu for SCE-->
+        <menuitem id="menu_dc_root" name="DC"  sequence="200" />
+
+        <menuitem name="Data Collector" parent="menu_dc_root" id="menu_dc_id" sequence="900" />
+        
+        
+         <record id="act_dc_page" model="ir.actions.act_window">
+            <field name="name">Pages</field>
+            <field name="res_model">dc.page</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="dc_page_tree_view"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">DC Pages
+                </p>
+            </field>
+        </record>
+
+        
+        <record id="act_dc_el" model="ir.actions.act_window">
+            <field name="name">Elements</field>
+            <field name="res_model">dc.el</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="dc_el_tree_view"/>
+            <!--<field name="domain">[]</field>-->
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">DC Elements
+                </p>
+            </field>
+        </record>
+        
+        <menuitem action="act_dc_page" id="menu_dc_page" name="DC Pages" parent="menu_dc_id" sequence="10"/>
+        <menuitem action="act_dc_el" id="menu_dc_el" name="Elements" parent="menu_dc_id" sequence="20"/>
+
+        
+   </data>
+</openerp>

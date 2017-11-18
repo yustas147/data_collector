@@ -29,9 +29,10 @@ class res_partner(models.Model):
             #return res
             
     @api.multi
-    def process_element(self, el):
+    def process_element(self, el, url=None):
         for i in self:
-            res = dict(url=el.page_id.base_url, x_path=el.x_path, fname=el.name, attr=el.attr_ids.mapped('name'))
+            res = dict(url=url, x_path=el.x_path, fname=el.name, attr=el.attr_ids.mapped('name'))
+#            res = dict(url=el.page_id.base_url, x_path=el.x_path, fname=el.name, attr=el.attr_ids.mapped('name'))
             if el.property_id:
                 res.update({'property': el.property_id.name})
             return res
@@ -43,14 +44,16 @@ class res_partner(models.Model):
         ''' Model-sided suffix adding''' 
         if not suffix:
             suffix = self.plk
+#            suffix = self.plk
             
         for i in self:
             return '/'.join([page,suffix])
     
     @api.multi
-    def render_page(self, url):
+    def render_page(self, url, suffix=None):
         parser = base_parser.phantomjs_parser()
-        furl = self.get_page_full_url(url)
+        #furl = self.get_page_full_url(url, suffix=suffix)
+        furl = url
         page = parser.set_page(furl)
         return page
         
@@ -61,7 +64,11 @@ class res_partner(models.Model):
         #url = self.get_page_full_url(url)
         #page = parser.set_page(url)
         x_path = kwargs.get('x_path')
-        res = page.find_element_by_xpath(x_path)
+        try:
+            res = page.find_element_by_xpath(x_path)
+        except NoSuchElementException:
+            _logger.info('Not found element %s' % unicode(x_path))
+            
         prop = kwargs.get('property')
         attr = kwargs.get('attr')
         if prop:
@@ -115,12 +122,17 @@ class res_partner(models.Model):
             res = {}
             elems = self.get_dc_elements()
             _logger.info('elems: %s' % unicode(elems))
-            urls = elems.mapped('page_id')
+            #urls = elems.mapped('page_id')]
+            ''' getting full urls '''
+            urls = [ el.get_full_page(act_id=i.id) for el in elems ]
+            
             for u in urls:
-                page = i.render_page(u.base_url)
+                page = i.render_page(u)
+#                page = i.render_page(u.base_url)
                 for el in elems:
-                    if el.page_id == u:
-                        parse_args = i.process_element(el)
+         #           if el.page_id == u:
+                    if el.get_full_page(act_id=i.id) == u:
+                        parse_args = i.process_element(el, url=u)
                         resi = i.parse_page(page, **parse_args)
                         res.update(dict([(el.name, resi)]))
                         

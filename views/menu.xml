@@ -32,8 +32,21 @@
             </field>
         </record>
         
+         <record id="act_dc_pgsfx" model="ir.actions.act_window">
+            <field name="name">Page Suffixes</field>
+            <field name="res_model">dc.page_suffix</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="dc_pgsfx_tree_view"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">DC Page Suffixes
+                </p>
+            </field>
+        </record>
+
+        
         <menuitem action="act_dc_page" id="menu_dc_page" name="DC Pages" parent="menu_dc_id" sequence="10"/>
         <menuitem action="act_dc_el" id="menu_dc_el" name="Elements" parent="menu_dc_id" sequence="20"/>
+        <menuitem action="act_dc_pgsfx" id="menu_dc_pgsfx" name="Page Suffixes" parent="menu_dc_id" sequence="30"/>
 
         
    </data>

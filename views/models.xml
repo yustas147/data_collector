@@ -34,9 +34,10 @@
                              <field name="name"/>
                              <field name="model_id"/>
                              <field name="x_path"/>
-                             <field name="page_id"/>
                              <field name="property_id"/>
                              <field name="attr_ids" widget='many2many_tags'/>
+                             <field name="page_id"/>
+                             <field name="page_suffix_id"/>
                 </tree>                
             </field>            
         </record>        
@@ -48,14 +49,42 @@
             <field name="arch" type="xml">
                 <form string="Data Collector Element">
                         <group>
+                             <!--<button name='get_full_page' type='object' string='Get Full Page'/>-->
                              <field name="name"/>
                              <field name="model_id"/>
                              <field name="x_path"/>
-                             <field name="page_id"/>
                              <field name="property_id"/>
                              <field name="attr_ids" widget='many2many_tags'/>
+                             <field name="page_id"/>
+                             <field name="page_suffix_id"/>
                         </group>                        
                 </form>                
+            </field>            
+        </record>        
+        <record model="ir.ui.view" id="dc_pgsfx_form_view">
+            <field name="name">dc.page.suffix.form.view</field>
+            <field name="model">dc.page_suffix</field>
+            <field name="arch" type="xml">
+                <form string="Page Suffix">
+                        <group>
+                             <field name="name"/>
+                             <field name="model_id"/>
+                             <field name="fld"/>
+                             <!--<button string='test gmf' type='object' name='g_m_f'/>-->
+                        </group>                        
+                </form>                
+            </field>            
+        </record>        
+        <record model="ir.ui.view" id="dc_pgsfx_tree_view">
+            <field name="name">dc.page.suffix.tree.view</field>
+            <field name="model">dc.page_suffix</field>
+            <field name="sequence">30</field>
+            <field name="arch" type="xml">
+                <tree string="Page Suffixes">
+                             <field name="name"/>
+                             <field name="model_id"/>
+                             <field name="fld"/>
+                </tree>                
             </field>            
         </record>        
     </data>    

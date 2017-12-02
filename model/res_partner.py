@@ -2,6 +2,8 @@
 from openerp import models, fields, api
 import logging
 from  ..unit import base_parser, bin_fetcher
+from time import sleep
+from os import name as osname
 _logger = logging.getLogger(__name__)
 
 class res_partner(models.Model):
@@ -51,25 +53,21 @@ class res_partner(models.Model):
         x_path = kwargs.get('x_path')
         try:
             res = page.find_element_by_xpath(x_path)
-        except:
-            _logger.info('Not found element %s' % unicode(x_path))
             
-        if res:
-            prop = kwargs.get('property')
-            attr = kwargs.get('attr')
-            if prop:
-                res = res.get_property(prop)
-            else:
-                if len(attr):
-                    res = res.get_attribute(attr[0])
+            if res:
+                prop = kwargs.get('property')
+                attr = kwargs.get('attr')
+                if prop:
+                    res = res.get_property(prop)
+                else:
+                    if len(attr):
+                        res = res.get_attribute(attr[0])
                     
             _logger.info('parse res is %s' % unicode(res))
-        #try:
-            #page.driver.quit()
-        #except:
-            #_logger.info('phantom driver quit trouble')
-            #pass
-        return res        
+            return res        
+
+        except:
+            _logger.info('Not found element %s' % unicode(x_path))
     
     
     @api.multi
@@ -149,8 +147,12 @@ class res_partner(models.Model):
             except:
                 pass
             i.write(fdata)
+            st = 2
+            _logger.info('sleep for %s sec' % unicode(st))
+            sleep(st)
             try:
-                page.quit()
+                if osname == 'nt':
+                    page.quit()
             except:
                 pass
     

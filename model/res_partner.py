@@ -63,25 +63,28 @@ class res_partner(models.Model):
         #url = kwargs.get('url')
         #url = self.get_page_full_url(url)
         #page = parser.set_page(url)
+        res = None
         x_path = kwargs.get('x_path')
         try:
             res = page.find_element_by_xpath(x_path)
-        except NoSuchElementException:
+        except:
             _logger.info('Not found element %s' % unicode(x_path))
             
-        prop = kwargs.get('property')
-        attr = kwargs.get('attr')
-        if prop:
-            res = res.get_property(prop)
-        else:
-            if len(attr):
-                res = res.get_attribute(attr[0])
-                
-        _logger.info('parse res is %s' % unicode(res))
-        #try:
-            #parser.driver.quit()
-        #except:
-            #pass
+        if res:
+            prop = kwargs.get('property')
+            attr = kwargs.get('attr')
+            if prop:
+                res = res.get_property(prop)
+            else:
+                if len(attr):
+                    res = res.get_attribute(attr[0])
+                    
+            _logger.info('parse res is %s' % unicode(res))
+        try:
+            page.driver.quit()
+        except:
+            _logger.info('phantom driver quit trouble')
+            pass
         return res        
     
     
@@ -110,8 +113,10 @@ class res_partner(models.Model):
                 
         _logger.info('parse res is %s' % unicode(res))
         try:
-            parser.driver.quit()
+            xxx = parser.driver.quit()
         except:
+            _logger.info('Phantom was not killed successfully, xxx: %s', (unicode(xxx)))
+            
             pass
         return res
             
@@ -120,37 +125,42 @@ class res_partner(models.Model):
     def get_my_data(self):
         for i in self:
             res = {}
-            elems = self.get_dc_elements()
+            elems = i.get_dc_elements()
+#            elems = self.get_dc_elements()
             _logger.info('elems: %s' % unicode(elems))
             #urls = elems.mapped('page_id')]
             ''' getting full urls '''
             urls = [ el.get_full_page(act_id=i.id) for el in elems ]
+            #lets make urls unique
+            urls = set(urls)
             
             for u in urls:
-                page = i.render_page(u)
-#                page = i.render_page(u.base_url)
+                i.page = i.render_page(u)
+                page = i.page
+#                page = i.render_page(u)
                 for el in elems:
          #           if el.page_id == u:
                     if el.get_full_page(act_id=i.id) == u:
                         parse_args = i.process_element(el, url=u)
                         resi = i.parse_page(page, **parse_args)
                         res.update(dict([(el.name, resi)]))
-                        
-            #for el in elems:
-                #parse_args = i.process_element(el)
- # #                parse_args = self.process_element(el)
-                #resi = i.parse(**parse_args)
-# #                resi = self.parse(**parse_args)
-                #res.update(dict([(el.name, resi)]))
+            #try:
+                #page.driver.quit()
+            #except:
+                #_logger.info('phantom driver quit trouble')
+                #pass                        
                 
             _logger.info('res is %s' % unicode(res))
-            return res
+            return res, page
+#            return res
         
     @api.multi
     def update_my_data(self):
         for i in self:
-            fdata = i.get_my_data()
+            fdata, page = i.get_my_data()
+#            fdata = i.get_my_data()
             i.write(fdata)
+            page.quit()
     
         
         

@@ -16,17 +16,6 @@ class res_partner(models.Model):
         for i in self:
             els = env['dc.el'].search([('model_id.model', '=', i._name)])            
             return els
-            #for el in els:
-                #k = el.page_id.id
-                #v = unicode(el)
-                #if not res.get(k, ''):
-                    #res.update({k : []})
-                #res[k].append(v)
-            #_logger.info('get_dc_elements res: %s' % unicode(res))            
-            #for k in res:
-                
-                #_logger.info('eval key: %s' % eval(res[k]).base_url)            
-            #return res
             
     @api.multi
     def process_element(self, el, url=None):
@@ -59,11 +48,6 @@ class res_partner(models.Model):
         
     @api.multi
     def parse_page(self, page, **kwargs):
-        #parser = base_parser.phantomjs_parser()
-        #url = kwargs.get('url')
-        #url = self.get_page_full_url(url)
-        #page = parser.set_page(url)
-        res = None
         x_path = kwargs.get('x_path')
         try:
             res = page.find_element_by_xpath(x_path)
@@ -80,11 +64,11 @@ class res_partner(models.Model):
                     res = res.get_attribute(attr[0])
                     
             _logger.info('parse res is %s' % unicode(res))
-        try:
-            page.driver.quit()
-        except:
-            _logger.info('phantom driver quit trouble')
-            pass
+        #try:
+            #page.driver.quit()
+        #except:
+            #_logger.info('phantom driver quit trouble')
+            #pass
         return res        
     
     

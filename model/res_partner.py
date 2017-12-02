@@ -159,6 +159,10 @@ class res_partner(models.Model):
         for i in self:
             fdata, page = i.get_my_data()
 #            fdata = i.get_my_data()
+            try:
+                i.i502 = 'https://502data.com/license/'+unicode(i.partner_license_key)
+            except:
+                pass
             i.write(fdata)
             page.quit()
     

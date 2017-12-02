@@ -40,6 +40,15 @@ class dc_el(models.Model):
                 res += '/' + suff
             _logger.info('get_full_page result is: ------------------------------------------------- %s' % (unicode(res)))
             return res
+        
+    @api.multi
+    def get_name_value(self, val):
+        for i in self:
+            try:
+                exec(i.name_trans)
+                return calcu(val)
+            except:
+                pass
     
     name = fields.Char(string="Data field name")
     page_id = fields.Many2one(comodel_name="dc.page", string="Page Containing")
@@ -49,6 +58,7 @@ class dc_el(models.Model):
     model_id = fields.Many2one(comodel_name='ir.model', string='Model')
     attr_ids = fields.Many2many(comodel_name='dc.attr', relation='el_attr_rel', string='Attributes')
     property_id = fields.Many2one(comodel_name='dc.property', string='Property')
+    name_trans = fields.Text(string="Function to bring the value of name")
     
     
 

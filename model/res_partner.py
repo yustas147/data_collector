@@ -9,6 +9,7 @@ _logger = logging.getLogger(__name__)
 class res_partner(models.Model):
     _inherit='res.partner'    
     
+    _order = 'last_month_sales desc'
     @api.multi
     def get_dc_elements(self):
         ''' Searches in db for elements to fetch from web pages
@@ -125,6 +126,8 @@ class res_partner(models.Model):
                     if el.get_full_page(act_id=i.id) == u:
                         parse_args = i.process_element(el, url=u)
                         resi = i.parse_page(page, **parse_args)
+                        if el.name_trans:
+                            resi = el.get_name_value(resi)
                         res.update(dict([(el.name, resi)]))
             #try:
                 #page.driver.quit()

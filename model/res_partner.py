@@ -160,11 +160,15 @@ class res_partner(models.Model):
             fdata, page = i.get_my_data()
 #            fdata = i.get_my_data()
             try:
-                i.i502 = 'https://502data.com/license/'+unicode(i.partner_license_key)
+                if i.partner_license_key:
+                    i.i502 = 'https://502data.com/license/'+unicode(i.partner_license_key)
             except:
                 pass
             i.write(fdata)
-            page.quit()
+            try:
+                page.quit()
+            except:
+                pass
     
         
         
